@@ -1,0 +1,27 @@
+&i2c1 {
+    status = "okay";
+
+    pinctrl-0 = <&i2c1_default>;
+	pinctrl-1 = <&i2c1_sleep>;
+    pinctrl-names = "default", "sleep";
+
+    /*Adding Temperature sensor to Device tree */
+    temperature: temperature@76{
+        compatible = "bosch,bme280";
+        status = "okay";
+        reg = < 0x76>;
+    };
+
+    /*Adding Accelorometer to Device Tree */
+    accelerometer: accelerometer@68{
+        compatible = "invensense,mpu6050";
+        status = "okay";
+        reg = < 0x68>;
+        
+        // accel-fs = <4>;       /* ±4g */
+        // gyro-fs = <500>;      /* ±500°/s */
+        // smplrt-div = <7>;     /* Sample rate = 1kHz/(1+7) = 125Hz */
+    };
+
+
+};

@@ -1,0 +1,43 @@
+{
+	"sources" : 
+	[
+		{
+			"file" : "E:/Hackaton/build/_sysbuild/sysbuild/images/CMakeFiles/Hackaton"
+		},
+		{
+			"file" : "E:/Hackaton/build/_sysbuild/sysbuild/images/CMakeFiles/Hackaton.rule"
+		},
+		{
+			"file" : "E:/Hackaton/build/_sysbuild/sysbuild/images/CMakeFiles/Hackaton-complete.rule"
+		},
+		{
+			"file" : "E:/Hackaton/build/_sysbuild/sysbuild/images/Hackaton-prefix/src/Hackaton-stamp/Hackaton-build.rule"
+		},
+		{
+			"file" : "E:/Hackaton/build/_sysbuild/sysbuild/images/Hackaton-prefix/src/Hackaton-stamp/Hackaton-configure.rule"
+		},
+		{
+			"file" : "E:/Hackaton/build/_sysbuild/sysbuild/images/Hackaton-prefix/src/Hackaton-stamp/Hackaton-download.rule"
+		},
+		{
+			"file" : "E:/Hackaton/build/_sysbuild/sysbuild/images/Hackaton-prefix/src/Hackaton-stamp/Hackaton-install.rule"
+		},
+		{
+			"file" : "E:/Hackaton/build/_sysbuild/sysbuild/images/Hackaton-prefix/src/Hackaton-stamp/Hackaton-mkdir.rule"
+		},
+		{
+			"file" : "E:/Hackaton/build/_sysbuild/sysbuild/images/Hackaton-prefix/src/Hackaton-stamp/Hackaton-patch.rule"
+		},
+		{
+			"file" : "E:/Hackaton/build/_sysbuild/sysbuild/images/Hackaton-prefix/src/Hackaton-stamp/Hackaton-update.rule"
+		}
+	],
+	"target" : 
+	{
+		"labels" : 
+		[
+			"Hackaton"
+		],
+		"name" : "Hackaton"
+	}
+}

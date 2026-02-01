@@ -1,0 +1,31 @@
+{
+    "configurations": [
+        {
+            "name": "nRF Connect",
+            "includePath": [
+                "${workspaceFolder}/**",
+                "${workspaceFolder}/includes",
+                "C:/ncs/v3.2.1/zephyr/include",
+                "C:/ncs/v3.2.1/zephyr/include/zephyr",
+                "C:/ncs/v3.2.1/zephyr/soc/nordic/nrf53/**",
+                "C:/ncs/v3.2.1/zephyr/lib/libc/newlib/include",
+                "C:/ncs/v3.2.1/modules/hal/cmsis/CMSIS/Core/Include",
+                "C:/ncs/v3.2.1/nrf/include",
+                "C:/ncs/toolchains/66cdf9b75e/opt/zephyr-sdk/arm-zephyr-eabi/arm-zephyr-eabi/include",
+                "${workspaceFolder}/build/Hackaton/zephyr/include/generated"
+            ],
+            "defines": [
+                "__ZEPHYR__=1",
+                "__GNUC__=12",
+                "__arm__",
+                "NRF5340_XXAA_APPLICATION",
+                "_POSIX_C_SOURCE=200809L"
+            ],
+            "compilerPath": "C:/ncs/toolchains/66cdf9b75e/opt/zephyr-sdk/arm-zephyr-eabi/bin/arm-zephyr-eabi-gcc.exe",
+            "cStandard": "c99",
+            "cppStandard": "c++17",
+            "intelliSenseMode": "gcc-arm"
+        }
+    ],
+    "version": 4
+}

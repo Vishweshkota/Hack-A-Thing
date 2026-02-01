@@ -1,0 +1,7 @@
+default: Hackaton
+build_dir: E:/Hackaton/build
+domains:
+  - name: Hackaton
+    build_dir: E:/Hackaton/build/Hackaton
+flash_order:
+  - Hackaton
