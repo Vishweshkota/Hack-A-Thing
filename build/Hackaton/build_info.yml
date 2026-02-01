@@ -11,6 +11,7 @@ cmake:
   devicetree:
     bindings-dirs:
      - 'C:/ncs/v3.2.1/nrf/dts/bindings'
+     - 'E:/Hackaton/dts/bindings'
      - 'C:/ncs/v3.2.1/zephyr/dts/bindings'
     files:
      - 'C:/ncs/v3.2.1/zephyr/boards/nordic/nrf7002dk/nrf7002dk_nrf5340_cpuapp.dts'
@@ -21,6 +22,7 @@ cmake:
      - 'C:/ncs/v3.2.1/nrf/dts/riscv'
      - 'C:/ncs/v3.2.1/nrf/dts/arm'
      - 'C:/ncs/v3.2.1/nrf/dts'
+     - 'E:/Hackaton/dts'
      - 'C:/ncs/v3.2.1/zephyr/include'
      - 'C:/ncs/v3.2.1/zephyr/include/zephyr'
      - 'C:/ncs/v3.2.1/zephyr/dts/common'

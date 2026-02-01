@@ -14,25 +14,30 @@
 K_THREAD_STACK_DEFINE(bme_stack, BME280_STACK_SIZE);
 K_THREAD_STACK_DEFINE(mpu_stack, MPU6050_STACK_SIZE);
 K_THREAD_STACK_DEFINE(mqtt_stack, MQTT_STACK_SIZE);
-
-K_THREAD_STACK_DEFINE(logger_stack, LOGGER_STACK_SIZE);
+K_THREAD_STACK_DEFINE(accuator_stack, ACTUATOR_STACK_SIZE);
 
 /* Thread objects */
 struct k_thread bme_thread;
 struct k_thread mpu_thread;
 struct k_thread mqtt_thread;
+struct k_thread accuator_thread;
 
 struct k_thread logger_thread;
 
 /* Mutex for protecting shared data */
 struct k_mutex data_mutex;
+struct k_mutex actuator_mutex;
+
 SensorData_t shared_sensor_data;
+ActuatorData_t shared_actuator_data;
 
 int main(void)
 {
     printk("=== Sensor Tasks Starting ===\n");
 
     k_mutex_init(&data_mutex);
+    k_mutex_init(&actuator_mutex);
+    
 
     k_thread_create(&mqtt_thread,
                     mqtt_stack,
@@ -54,13 +59,15 @@ int main(void)
                     mpu6050_task,
                     NULL, NULL, NULL,
                     MPU6050_PRIORITY, 0, K_NO_WAIT); 
+    
+    k_thread_create(&accuator_thread,
+                    accuator_stack,
+                    K_THREAD_STACK_SIZEOF(accuator_stack),
+                    actuator_task,
+                    NULL, NULL, NULL,
+                    ACTUATOR_PRIORITY, 0, K_NO_WAIT); 
         
-    // k_thread_create(&logger_thread,
-    //                 logger_stack,
-    //                 K_THREAD_STACK_SIZEOF(logger_stack),
-    //                 logger_task,
-    //                 NULL, NULL, NULL,
-    //                 7, 0, K_NO_WAIT); /* lower priority */
+    
 
     return 0;
 }

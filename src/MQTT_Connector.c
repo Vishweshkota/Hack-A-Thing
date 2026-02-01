@@ -18,32 +18,46 @@ static uint8_t client_id[32];
 
 #define SUBSCRIBE_TOPIC_ID 1234
 
-/* LED */
-#define LED0_NODE DT_ALIAS(led0)
-#if DT_NODE_EXISTS(LED0_NODE)
-static const struct gpio_dt_spec led = GPIO_DT_SPEC_GET(LED0_NODE, gpios);
-#endif
 
 /* ═══════════════════════════════════════════════════════════════════════════
    COMMAND HANDLER
    ═══════════════════════════════════════════════════════════════════════════ */
 static void handle_command(const char *cmd, size_t len)
 {
-    LOG_INF("CMD: %.*s", (int)len, cmd);
+    LOG_INF("CMD Received: %.*s", (int)len, cmd);
 
-#if DT_NODE_EXISTS(LED0_NODE)
-    if (!device_is_ready(led.port)) {
-        return;
-    }
+    /* Lock mutex before updating shared actuator data */
+    k_mutex_lock(&actuator_mutex, K_FOREVER);
 
     if (strncmp(cmd, "LED_ON", 6) == 0) {
-        gpio_pin_set_dt(&led, 1);
-        LOG_INF("LED ON");
-    } else if (strncmp(cmd, "LED_OFF", 7) == 0) {
-        gpio_pin_set_dt(&led, 0);
-        LOG_INF("LED OFF");
+        shared_actuator_data.ledON = true;
+        LOG_INF("LED ON command set");
+    } 
+    else if (strncmp(cmd, "LED_OFF", 7) == 0) {
+        shared_actuator_data.ledON = false;
+        LOG_INF("LED OFF command set");
     }
-#endif
+    else if (strncmp(cmd, "MOTOR_ON", 8) == 0) {
+        shared_actuator_data.motorVibrate = true;
+        LOG_INF("MOTOR ON command set");
+    }
+    else if (strncmp(cmd, "MOTOR_OFF", 9) == 0) {
+        shared_actuator_data.motorVibrate = false;
+        LOG_INF("MOTOR OFF command set");
+    }
+    else if (strncmp(cmd, "BUZZER_ON", 9) == 0) {
+        shared_actuator_data.buzzerON = true;
+        LOG_INF("BUZZER ON command set");
+    }
+    else if (strncmp(cmd, "BUZZER_OFF", 10) == 0) {
+        shared_actuator_data.buzzerON = false;
+        LOG_INF("BUZZER OFF command set");
+    }
+    else {
+        LOG_WRN("Unknown command: %.*s", (int)len, cmd);
+    }
+
+    k_mutex_unlock(&actuator_mutex);
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
@@ -162,6 +176,7 @@ static int mqtt_publish_msg(const char *payload)
     return mqtt_helper_publish(&param);
 }
 
+
 /* ═══════════════════════════════════════════════════════════════════════════
    MQTT TASK
    ═══════════════════════════════════════════════════════════════════════════ */
@@ -180,14 +195,6 @@ void mqtt_task(void *arg1, void *arg2, void *arg3)
     LOG_INF("════════════════════════════════════════");
     LOG_INF("  MQTT Task Started");
     LOG_INF("════════════════════════════════════════");
-
-    /* Init LED */
-#if DT_NODE_EXISTS(LED0_NODE)
-    if (device_is_ready(led.port)) {
-        gpio_pin_configure_dt(&led, GPIO_OUTPUT_INACTIVE);
-        LOG_INF("LED initialized");
-    }
-#endif
 
     /* Wait for WiFi driver init */
     k_sleep(K_SECONDS(1));

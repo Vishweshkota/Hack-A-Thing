@@ -212,3 +212,11 @@ Optional: MQ gas sensor
 │                                                                                        │
 └────────────────────────────────────────────────────────────────────────────────────────┘
 
+
+
+Commands
+LED_ON LED_OFF
+
+MOTOR_VIBRATE
+
+MOTOR_VIBRATE

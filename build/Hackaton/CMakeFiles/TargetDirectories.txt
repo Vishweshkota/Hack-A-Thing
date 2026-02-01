@@ -258,11 +258,17 @@ E:/Hackaton/build/Hackaton/zephyr/drivers/hwinfo/CMakeFiles/rebuild_cache.dir
 E:/Hackaton/build/Hackaton/zephyr/drivers/i2c/CMakeFiles/drivers__i2c.dir
 E:/Hackaton/build/Hackaton/zephyr/drivers/i2c/CMakeFiles/edit_cache.dir
 E:/Hackaton/build/Hackaton/zephyr/drivers/i2c/CMakeFiles/rebuild_cache.dir
+E:/Hackaton/build/Hackaton/zephyr/drivers/led/CMakeFiles/drivers__led.dir
+E:/Hackaton/build/Hackaton/zephyr/drivers/led/CMakeFiles/edit_cache.dir
+E:/Hackaton/build/Hackaton/zephyr/drivers/led/CMakeFiles/rebuild_cache.dir
 E:/Hackaton/build/Hackaton/zephyr/drivers/pinctrl/CMakeFiles/edit_cache.dir
 E:/Hackaton/build/Hackaton/zephyr/drivers/pinctrl/CMakeFiles/drivers__pinctrl.dir
 E:/Hackaton/build/Hackaton/zephyr/drivers/pinctrl/CMakeFiles/rebuild_cache.dir
 E:/Hackaton/build/Hackaton/zephyr/drivers/pinctrl/renesas/CMakeFiles/edit_cache.dir
 E:/Hackaton/build/Hackaton/zephyr/drivers/pinctrl/renesas/CMakeFiles/rebuild_cache.dir
+E:/Hackaton/build/Hackaton/zephyr/drivers/pwm/CMakeFiles/drivers__pwm.dir
+E:/Hackaton/build/Hackaton/zephyr/drivers/pwm/CMakeFiles/edit_cache.dir
+E:/Hackaton/build/Hackaton/zephyr/drivers/pwm/CMakeFiles/rebuild_cache.dir
 E:/Hackaton/build/Hackaton/zephyr/drivers/sensor/CMakeFiles/drivers__sensor.dir
 E:/Hackaton/build/Hackaton/zephyr/drivers/sensor/CMakeFiles/edit_cache.dir
 E:/Hackaton/build/Hackaton/zephyr/drivers/sensor/CMakeFiles/rebuild_cache.dir

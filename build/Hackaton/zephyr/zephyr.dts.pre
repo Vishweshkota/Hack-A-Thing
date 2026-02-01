@@ -1475,8 +1475,52 @@ wifi-max-tx-pwr-5g-high-mcs7 = <13>;
 
 
     };
+};
 
+/ {
+ aliases {
+  pwm-servo0 = &servo;
+  sw0 = &button0;
+  led0 = &led1_pin;
+ };
 
+ servo: servo {
+  compatible = "pwm-servo";
+  pwms = <&pwm0 0 (((20) * 1000UL) * 1000UL) (0 << 0)>;
+  min-pulse = <((700) * 1000UL)>;
+  max-pulse = <((2500) * 1000UL)>;
+ };
+
+ my_led {
+  compatible = "gpio-leds";
+  status = "okay";
+  led1_pin: led1_pin {
+   gpios = <&gpio0 2 (1 << 0)>;
+   label = "LED1 on P0.02";
+  };
+ };
+};
+
+&pwm0 {
+ status = "okay";
+ pinctrl-0 = <&pwm0_default>;
+ pinctrl-1 = <&pwm0_sleep>;
+ pinctrl-names = "default", "sleep";
+};
+
+&pinctrl {
+ pwm0_default: pwm0_default {
+  group1 {
+   psels = <((((((0) * 32U) + (4)) & 0x1FFU) << 0U) | ((22U & 0xFFU) << 24U))>;
+  };
+ };
+
+ pwm0_sleep: pwm0_sleep {
+  group1 {
+   psels = <((((((0) * 32U) + (4)) & 0x1FFU) << 0U) | ((22U & 0xFFU) << 24U))>;
+   low-power-enable;
+  };
+ };
 };
 # 0 "<command-line>" 2
 # 1 "C:/ncs/v3.2.1/zephyr/misc/empty_file.c"

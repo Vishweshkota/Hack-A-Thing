@@ -8047,6 +8047,11 @@ DT_COMPAT_PWM_LEDS := pwm-leds
 config DT_HAS_PWM_LEDS_ENABLED
 	def_bool $(dt_compat_enabled,$(DT_COMPAT_PWM_LEDS))
 
+DT_COMPAT_PWM_SERVO := pwm-servo
+
+config DT_HAS_PWM_SERVO_ENABLED
+	def_bool $(dt_compat_enabled,$(DT_COMPAT_PWM_SERVO))
+
 DT_COMPAT_QCA_AR8031 := qca,ar8031
 
 config DT_HAS_QCA_AR8031_ENABLED

@@ -485,7 +485,7 @@ Zephyr_DIR:PATH=C:/ncs/v3.2.1/zephyr/share/zephyr-package/cmake
 //List of board directories for board (nrf7002dk)
 BOARD_DIRECTORIES:INTERNAL=C:/ncs/v3.2.1/zephyr/boards/nordic/nrf7002dk
 //DT bindings root directories
-CACHED_DTS_ROOT_BINDINGS:INTERNAL=C:/ncs/v3.2.1/nrf/dts/bindings;C:/ncs/v3.2.1/zephyr/dts/bindings
+CACHED_DTS_ROOT_BINDINGS:INTERNAL=C:/ncs/v3.2.1/nrf/dts/bindings;E:/Hackaton/dts/bindings;C:/ncs/v3.2.1/zephyr/dts/bindings
 CLI_CONFIG_DEBUG_THREAD_INFO:INTERNAL=y
 //ADVANCED property for variable: CMAKE_ADDR2LINE
 CMAKE_ADDR2LINE-ADVANCED:INTERNAL=1
@@ -596,7 +596,7 @@ CMAKE_MODULE_LINKER_FLAGS_RELWITHDEBINFO-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_NM
 CMAKE_NM-ADVANCED:INTERNAL=1
 //number of local generators
-CMAKE_NUMBER_OF_MAKEFILES:INTERNAL=252
+CMAKE_NUMBER_OF_MAKEFILES:INTERNAL=254
 //ADVANCED property for variable: CMAKE_OBJCOPY
 CMAKE_OBJCOPY-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_OBJDUMP
