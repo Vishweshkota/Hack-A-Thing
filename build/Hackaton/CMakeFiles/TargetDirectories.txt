@@ -420,6 +420,9 @@ E:/Hackaton/build/Hackaton/modules/nrf/subsys/net/CMakeFiles/edit_cache.dir
 E:/Hackaton/build/Hackaton/modules/nrf/subsys/net/CMakeFiles/rebuild_cache.dir
 E:/Hackaton/build/Hackaton/modules/nrf/subsys/net/lib/CMakeFiles/edit_cache.dir
 E:/Hackaton/build/Hackaton/modules/nrf/subsys/net/lib/CMakeFiles/rebuild_cache.dir
+E:/Hackaton/build/Hackaton/modules/nrf/subsys/net/lib/mqtt_helper/CMakeFiles/rebuild_cache.dir
+E:/Hackaton/build/Hackaton/modules/nrf/subsys/net/lib/mqtt_helper/CMakeFiles/..__nrf__subsys__net__lib__mqtt_helper.dir
+E:/Hackaton/build/Hackaton/modules/nrf/subsys/net/lib/mqtt_helper/CMakeFiles/edit_cache.dir
 E:/Hackaton/build/Hackaton/modules/nrf/subsys/net/lib/nrf70_fw_ext/CMakeFiles/rebuild_cache.dir
 E:/Hackaton/build/Hackaton/modules/nrf/subsys/net/lib/nrf70_fw_ext/CMakeFiles/gen_nrf70_bin_inc_f8e88e5d964f126200efa9ef3fc681d8.dir
 E:/Hackaton/build/Hackaton/modules/nrf/subsys/net/lib/nrf70_fw_ext/CMakeFiles/edit_cache.dir

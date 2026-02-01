@@ -13,9 +13,9 @@
 #define MPU6050_NODE  DT_NODELABEL(accelerometer)
 
 /* Defining Stack size for sensors*/
-#define BME280_STACK_SIZE 1024
+#define BME280_STACK_SIZE  1024
 #define MPU6050_STACK_SIZE 1024
-#define MQTT_STACK_SIZE 1024
+#define MQTT_STACK_SIZE    8129
 
 #define LOGGER_STACK_SIZE 1024
 

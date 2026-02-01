@@ -1,7 +1,7 @@
 #ifndef ACCCEL_MPU6050_H
 #define ACCCEL_MPU6050_H
+#include <math.h>
 
-#include "common.h"
 /* Registers */
 #define MPU6050_REG_PWR_MGMT_1      0x6B
 #define MPU6050_REG_GYRO_CONFIG     0x1B

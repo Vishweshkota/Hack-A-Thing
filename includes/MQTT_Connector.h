@@ -8,6 +8,8 @@
 #include <zephyr/net/mqtt.h>
 #include <zephyr/random/random.h>
 #include <zephyr/drivers/gpio.h>
+#include <net/mqtt_helper.h>
+#include <zephyr/random/random.h>
 #include <stdio.h>
 #include <string.h>
 

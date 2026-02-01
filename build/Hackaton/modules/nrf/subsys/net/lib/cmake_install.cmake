@@ -39,6 +39,11 @@ endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
+  include("E:/Hackaton/build/Hackaton/modules/nrf/subsys/net/lib/mqtt_helper/cmake_install.cmake")
+endif()
+
+if(NOT CMAKE_INSTALL_LOCAL_ONLY)
+  # Include the install script for the subdirectory.
   include("E:/Hackaton/build/Hackaton/modules/nrf/subsys/net/lib/nrf70_fw_ext/cmake_install.cmake")
 endif()
 

@@ -19,4 +19,27 @@ config SPI
 config I2C
 	default y
 
+# ═══════════════════════════════════════════════════════════════
+# MQTT Settings
+# ═══════════════════════════════════════════════════════════════
+menu "MQTT Settings"
+
+config MQTT_SAMPLE_BROKER_HOSTNAME
+	string "MQTT broker hostname"
+	default "broker.hivemq.com"
+
+config MQTT_SAMPLE_PUB_TOPIC
+	string "MQTT publish topic"
+	default "nrfbelt/sensors"
+
+config MQTT_SAMPLE_SUB_TOPIC
+	string "MQTT subscribe topic"
+	default "nrfbelt/commands"
+
+config MQTT_CLIENT_ID
+	string "MQTT Client ID"
+	default "nrf7002-belt"
+
+endmenu
+
 source "Kconfig.zephyr"
