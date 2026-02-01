@@ -165,11 +165,17 @@ static int mqtt_publish_msg(const char *payload)
 /* ═══════════════════════════════════════════════════════════════════════════
    MQTT TASK
    ═══════════════════════════════════════════════════════════════════════════ */
+/* ═══════════════════════════════════════════════════════════════════════════
+   MQTT TASK - With Retry Mechanism
+   ═══════════════════════════════════════════════════════════════════════════ */
 void mqtt_task(void *arg1, void *arg2, void *arg3)
 {
     int err;
     int counter = 0;
-    char msg[256];
+    char msg[512];
+    int mqtt_retry_count = 0;
+    const int MAX_MQTT_RETRIES = 10;
+    const int MQTT_RETRY_DELAY_MS = 5000;
 
     LOG_INF("════════════════════════════════════════");
     LOG_INF("  MQTT Task Started");
@@ -194,7 +200,8 @@ void mqtt_task(void *arg1, void *arg2, void *arg3)
     LOG_INF("Waiting for WiFi (auto-connect)...");
     k_sem_take(&wifi_connected_sem, K_FOREVER);
     
-    LOG_INF("WiFi connected! Starting MQTT...");
+    LOG_INF("WiFi connected! Waiting for IP...");
+    k_sleep(K_SECONDS(3));  /* Wait for DHCP */
 
     /* Initialize MQTT Helper */
     struct mqtt_helper_cfg config = {
@@ -217,7 +224,7 @@ void mqtt_task(void *arg1, void *arg2, void *arg3)
     uint32_t id = sys_rand32_get();
     snprintf(client_id, sizeof(client_id), "nrf7002-belt-%08x", id);
 
-    /* Connect to MQTT broker */
+    /* MQTT connection params */
     struct mqtt_helper_conn_params conn_params = {
         .hostname.ptr = CONFIG_MQTT_SAMPLE_BROKER_HOSTNAME,
         .hostname.size = strlen(CONFIG_MQTT_SAMPLE_BROKER_HOSTNAME),
@@ -225,31 +232,86 @@ void mqtt_task(void *arg1, void *arg2, void *arg3)
         .device_id.size = strlen(client_id),
     };
 
-    LOG_INF("Connecting to MQTT: %s", CONFIG_MQTT_SAMPLE_BROKER_HOSTNAME);
-    err = mqtt_helper_connect(&conn_params);
-    if (err) {
-        LOG_ERR("MQTT connect failed: %d", err);
-        return;
-    }
+    /* ═══════════════════════════════════════════════════════════════════════
+       MQTT CONNECT WITH RETRY
+       ═══════════════════════════════════════════════════════════════════════ */
+    while (!mqtt_connected && mqtt_retry_count < MAX_MQTT_RETRIES) {
+        LOG_INF("Connecting to MQTT: %s (attempt %d/%d)", 
+                CONFIG_MQTT_SAMPLE_BROKER_HOSTNAME,
+                mqtt_retry_count + 1, 
+                MAX_MQTT_RETRIES);
+        
+        err = mqtt_helper_connect(&conn_params);
+        if (err) {
+            LOG_ERR("MQTT connect request failed: %d", err);
+            mqtt_retry_count++;
+            LOG_INF("Retrying in %d seconds...", MQTT_RETRY_DELAY_MS / 1000);
+            k_msleep(MQTT_RETRY_DELAY_MS);
+            continue;
+        }
 
-    /* Wait for MQTT connection */
-    for (int i = 0; i < 100 && !mqtt_connected; i++) {
-        k_msleep(100);
+        /* Wait for CONNACK */
+        for (int i = 0; i < 100 && !mqtt_connected; i++) {
+            k_msleep(100);
+        }
+
+        if (!mqtt_connected) {
+            LOG_WRN("MQTT connection timeout, retrying...");
+            mqtt_helper_disconnect();
+            mqtt_retry_count++;
+            k_msleep(MQTT_RETRY_DELAY_MS);
+        }
     }
 
     if (!mqtt_connected) {
-        LOG_ERR("MQTT connection timeout!");
-        return;
+        LOG_ERR("MQTT connection failed after %d attempts!", MAX_MQTT_RETRIES);
+        LOG_ERR("Continuing without MQTT - will retry in main loop");
+    } else {
+        LOG_INF("════════════════════════════════════════");
+        LOG_INF("  MQTT Connected! Publishing Data");
+        LOG_INF("  Topic: %s", CONFIG_MQTT_SAMPLE_PUB_TOPIC);
+        LOG_INF("════════════════════════════════════════");
     }
 
-    LOG_INF("════════════════════════════════════════");
-    LOG_INF("  MQTT Ready - Publishing Data");
-    LOG_INF("════════════════════════════════════════");
-
-    /* Main loop - publish sensor data */
+    /* ═══════════════════════════════════════════════════════════════════════
+       MAIN LOOP - With Reconnection
+       ═══════════════════════════════════════════════════════════════════════ */
     while (1) {
-        if (mqtt_connected)
-        {
+        /* Check WiFi connection */
+        if (!wifi_connected) {
+            LOG_WRN("WiFi disconnected, waiting for reconnect...");
+            k_sem_take(&wifi_connected_sem, K_FOREVER);
+            LOG_INF("WiFi reconnected!");
+            k_sleep(K_SECONDS(3));  /* Wait for DHCP */
+            mqtt_connected = false;  /* Force MQTT reconnect */
+        }
+
+        /* Reconnect MQTT if disconnected */
+        if (!mqtt_connected && wifi_connected) {
+            LOG_INF("MQTT disconnected, reconnecting...");
+            k_msleep(2000);
+            
+            err = mqtt_helper_connect(&conn_params);
+            if (err) {
+                LOG_ERR("MQTT reconnect failed: %d", err);
+                k_msleep(MQTT_RETRY_DELAY_MS);
+                continue;
+            }
+
+            /* Wait for CONNACK */
+            for (int i = 0; i < 100 && !mqtt_connected; i++) {
+                k_msleep(100);
+            }
+
+            if (mqtt_connected) {
+                LOG_INF("MQTT reconnected!");
+            }
+            continue;
+        }
+
+        /* Publish sensor data */
+        if (mqtt_connected) {
+            /* Get sensor data with mutex protection */
             SensorData_t data;
             k_mutex_lock(&data_mutex, K_FOREVER);
             memcpy(&data, &shared_sensor_data, sizeof(data));
@@ -258,7 +320,7 @@ void mqtt_task(void *arg1, void *arg2, void *arg3)
             /* Format JSON with real sensor data */
             snprintf(msg, sizeof(msg),
                 "{"
-                "\"id\":%d,"
+                "\"packetid\":%d,"
                 "\"device\":\"nRF7002-Belt\","
                 "\"temperature\":%.2f,"
                 "\"humidity\":%.2f,"
@@ -292,6 +354,9 @@ void mqtt_task(void *arg1, void *arg2, void *arg3)
                         data.accel_x, data.accel_y, data.accel_z);
             } else {
                 LOG_ERR("Publish failed (%d)", err);
+                if (err == -ENOTCONN) {
+                    mqtt_connected = false;  /* Trigger reconnect */
+                }
             }
         }
 

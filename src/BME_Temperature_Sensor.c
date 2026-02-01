@@ -21,11 +21,11 @@ void bme280_task(void *p1, void *p2, void *p3)
         sensor_channel_get(bme, SENSOR_CHAN_HUMIDITY, &hum);
 
         bme_data.temperature = sensor_value_to_double(&temp);
-        printk("BME280 Temperature: %.2f C\n", bme_data.temperature);
+        // printk("BME280 Temperature: %.2f C\n", bme_data.temperature);
         bme_data.pressure    = sensor_value_to_double(&press);
-        printk("BME280 Pressure: %.2f hPa\n", bme_data.pressure / 100.0);
+        // printk("BME280 Pressure: %.2f hPa\n", bme_data.pressure / 100.0);
         bme_data.humidity    = sensor_value_to_double(&hum);
-        printk("BME280 Humidity: %.2f %%\n", bme_data.humidity);
+        // printk("BME280 Humidity: %.2f %%\n", bme_data.humidity);
         
         k_mutex_lock(&data_mutex, K_FOREVER);
         shared_sensor_data.temperature = bme_data.temperature;
