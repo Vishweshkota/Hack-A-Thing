@@ -163,26 +163,6 @@ static int mqtt_publish_msg(const char *payload)
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
-   WIFI CONNECT
-   ═══════════════════════════════════════════════════════════════════════════ */
-static int wifi_args_to_params(struct wifi_connect_req_params *params)
-{
-    params->ssid = CONFIG_WIFI_CREDENTIALS_STATIC_SSID;
-    params->ssid_length = strlen(params->ssid);
-    params->psk = CONFIG_WIFI_CREDENTIALS_STATIC_PASSWORD;
-    params->psk_length = strlen(params->psk);
-    params->channel = WIFI_CHANNEL_ANY;
-    params->security = WIFI_SECURITY_TYPE_PSK;
-    params->mfp = WIFI_MFP_OPTIONAL;
-    params->timeout = SYS_FOREVER_MS;
-    params->band = WIFI_FREQ_BAND_UNKNOWN;
-    return 0;
-}
-
-/* ═══════════════════════════════════════════════════════════════════════════
-   MQTT TASK
-   ═══════════════════════════════════════════════════════════════════════════ */
-/* ═══════════════════════════════════════════════════════════════════════════
    MQTT TASK
    ═══════════════════════════════════════════════════════════════════════════ */
 void mqtt_task(void *arg1, void *arg2, void *arg3)
@@ -268,14 +248,48 @@ void mqtt_task(void *arg1, void *arg2, void *arg3)
 
     /* Main loop - publish sensor data */
     while (1) {
-        if (mqtt_connected) {
+        if (mqtt_connected)
+        {
+            SensorData_t data;
+            k_mutex_lock(&data_mutex, K_FOREVER);
+            memcpy(&data, &shared_sensor_data, sizeof(data));
+            k_mutex_unlock(&data_mutex);
+
+            /* Format JSON with real sensor data */
             snprintf(msg, sizeof(msg),
-                "{\"id\":%d,\"device\":\"nRF7002-Belt\",\"temp\":25.5,\"humidity\":60.0}",
-                counter++);
+                "{"
+                "\"id\":%d,"
+                "\"device\":\"nRF7002-Belt\","
+                "\"temperature\":%.2f,"
+                "\"humidity\":%.2f,"
+                "\"pressure\":%.2f,"
+                "\"accel_x\":%.2f,"
+                "\"accel_y\":%.2f,"
+                "\"accel_z\":%.2f,"
+                "\"gyro_x\":%.2f,"
+                "\"gyro_y\":%.2f,"
+                "\"gyro_z\":%.2f,"
+                "\"fall_detected\":%s"
+                "}",
+                counter++,
+                data.temperature,
+                data.humidity,
+                data.pressure,
+                data.accel_x,
+                data.accel_y,
+                data.accel_z,
+                data.gyro_x,
+                data.gyro_y,
+                data.gyro_z,
+                data.fall_detected ? "true" : "false"
+            );
 
             err = mqtt_publish_msg(msg);
             if (err == 0) {
-                LOG_INF("Published [%d]", counter - 1);
+                LOG_INF("Published [%d]: T=%.1fC A=(%.1f,%.1f,%.1f)", 
+                        counter - 1, 
+                        data.temperature,
+                        data.accel_x, data.accel_y, data.accel_z);
             } else {
                 LOG_ERR("Publish failed (%d)", err);
             }

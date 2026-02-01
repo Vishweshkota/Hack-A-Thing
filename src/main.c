@@ -41,19 +41,19 @@ int main(void)
                     NULL, NULL, NULL,
                     MQTT_PRIORITY, 0, K_NO_WAIT);
 
-    // k_thread_create(&bme_thread,
-    //                 bme_stack,
-    //                 K_THREAD_STACK_SIZEOF(bme_stack),
-    //                 bme280_task,
-    //                 NULL, NULL, NULL,
-    //                 BME280_PRIORITY, 0, K_NO_WAIT);
+    k_thread_create(&bme_thread,
+                    bme_stack,
+                    K_THREAD_STACK_SIZEOF(bme_stack),
+                    bme280_task,
+                    NULL, NULL, NULL,
+                    BME280_PRIORITY, 0, K_NO_WAIT);
 
-    // k_thread_create(&mpu_thread,
-    //                 mpu_stack,
-    //                 K_THREAD_STACK_SIZEOF(mpu_stack),
-    //                 mpu6050_task,
-    //                 NULL, NULL, NULL,
-    //                 MPU6050_PRIORITY, 0, K_NO_WAIT); 
+    k_thread_create(&mpu_thread,
+                    mpu_stack,
+                    K_THREAD_STACK_SIZEOF(mpu_stack),
+                    mpu6050_task,
+                    NULL, NULL, NULL,
+                    MPU6050_PRIORITY, 0, K_NO_WAIT); 
         
     // k_thread_create(&logger_thread,
     //                 logger_stack,
